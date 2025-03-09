@@ -42,6 +42,7 @@ const translation = {
     zoomOut: '缩小',
     zoomIn: '放大',
     openInNewTab: '在新标签页打开',
+    comingSoon: '即将推出',
   },
   errorMsg: {
     fieldRequired: '{{field}} 为必填项',
@@ -77,6 +78,9 @@ const translation = {
   },
   unit: {
     char: '个字符',
+  },
+  workspace: {
+    add: '添加工作空间',
   },
   actionMsg: {
     noModification: '暂无修改',
@@ -520,7 +524,7 @@ const translation = {
       modal: {
         title: '有 {{num}} 个知识库在上下文中',
         add: '添加上下文',
-        footer: '您可以在下面的“上下文”部分中管理上下文。',
+        footer: '您可以在下面的"上下文"部分中管理上下文。',
       },
     },
     history: {
