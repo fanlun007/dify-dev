@@ -738,6 +738,31 @@ class TenantService:
 
         return tenant.custom_config_dict
 
+    @staticmethod
+    def create_tenant_for_owner(account: Account, name: str) -> Tenant:
+        """
+        Create a new tenant for an owner
+        Only workspace owners can create new tenants
+        
+        :param account: The account that will own the new tenant
+        :param name: Name of the new tenant
+        :return: The newly created tenant
+        """
+        # Verify the user has owner role in their current workspace
+        if account.current_role != TenantAccountRole.OWNER:
+            raise NoPermissionError("Only workspace owners can create new workspaces")
+        
+        # Create the tenant
+        tenant = TenantService.create_tenant(name=name, is_from_dashboard=True)
+        
+        # Associate the account with the tenant as owner
+        TenantService.create_tenant_member(tenant, account, role="owner")
+        
+        # Send tenant created event
+        tenant_was_created.send(tenant)
+        
+        return tenant
+
 
 class RegisterService:
     @classmethod

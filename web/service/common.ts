@@ -148,6 +148,10 @@ export const switchWorkspace: Fetcher<CommonResponse & { new_tenant: IWorkspace 
   return post<CommonResponse & { new_tenant: IWorkspace }>(url, { body })
 }
 
+export const createWorkspace: Fetcher<CommonResponse & { tenant: IWorkspace }, { name: string }> = ({ name }) => {
+  return post<CommonResponse & { tenant: IWorkspace }>('/tenant', { body: { name } })
+}
+
 export const fetchDataSource: Fetcher<{ data: DataSourceNotion[] }, { url: string }> = ({ url }) => {
   return get<{ data: DataSourceNotion[] }>(url)
 }

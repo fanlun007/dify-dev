@@ -7,11 +7,12 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import { useContext } from 'use-context-selector'
 import { RiAddLine, RiUserAddLine } from '@remixicon/react'
 import { useTranslation } from 'react-i18next'
+import { useRouter } from 'next/navigation'
 import InviteModal from './invite-modal'
 import InvitedModal from './invited-modal'
 import AddWorkspaceModal from './add-workspace-modal'
 import Operation from './operation'
-import { fetchMembers } from '@/service/common'
+import { createWorkspace, fetchMembers } from '@/service/common'
 import I18n from '@/context/i18n'
 import { useAppContext } from '@/context/app-context'
 import Avatar from '@/app/components/base/avatar'
@@ -61,6 +62,7 @@ const MembersPage = () => {
     = enableBilling
     && isNotUnlimitedMemberPlan
     && accounts.length >= plan.total.teamMembers
+  const router = useRouter()
 
   const handleAddWorkspace = () => {
     setAddWorkspaceModalVisible(true)
@@ -68,15 +70,24 @@ const MembersPage = () => {
 
   const handleCreateWorkspace = async (name: string) => {
     try {
-      // 这里添加创建工作空间的 API 调用
-      // 由于目前没有实际的 API，我们先显示一个成功消息
-      Toast.notify({
-        type: 'success',
-        message: t('common.api.actionSuccess'),
-      })
-      setAddWorkspaceModalVisible(false)
+      const { result, tenant } = await createWorkspace({ name })
+
+      if (result === 'success') {
+        Toast.notify({
+          type: 'success',
+          message: t('common.api.actionSuccess'),
+        })
+        setAddWorkspaceModalVisible(false)
+
+        if (tenant && tenant.id)
+          router.refresh()
+      }
+      else {
+        throw new Error('Failed to create workspace')
+      }
     }
     catch (error) {
+      console.error('Error creating workspace:', error)
       Toast.notify({
         type: 'error',
         message: t('common.api.actionFailed', 'Action failed'),

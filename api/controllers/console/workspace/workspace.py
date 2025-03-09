@@ -220,10 +220,33 @@ class WebappLogoWorkspaceApi(Resource):
         return {"id": upload_file.id}, 201
 
 
+class TenantOpsApi(Resource):
+    @setup_required
+    @login_required
+    @account_initialization_required
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("name", type=str, required=True, location="json")
+        args = parser.parse_args()
+
+        # Check if current user is an owner
+        if not current_user.current_role == "owner":
+            raise Unauthorized("Only workspace owners can create new workspaces")
+        
+        # Create new tenant and associate with current user
+        tenant = TenantService.create_tenant_for_owner(current_user, args["name"])
+        
+        return {
+            "result": "success", 
+            "tenant": marshal(WorkspaceService.get_tenant_info(tenant), tenant_fields)
+        }
+
+
 api.add_resource(TenantListApi, "/workspaces")  # GET for getting all tenants
 api.add_resource(WorkspaceListApi, "/all-workspaces")  # GET for getting all tenants
 api.add_resource(TenantApi, "/workspaces/current", endpoint="workspaces_current")  # GET for getting current tenant info
 api.add_resource(TenantApi, "/info", endpoint="info")  # Deprecated
 api.add_resource(SwitchWorkspaceApi, "/workspaces/switch")  # POST for switching tenant
+api.add_resource(TenantOpsApi, "/tenant")  # POST for creating tenant
 api.add_resource(CustomConfigWorkspaceApi, "/workspaces/custom-config")
 api.add_resource(WebappLogoWorkspaceApi, "/workspaces/custom-config/webapp-logo/upload")
