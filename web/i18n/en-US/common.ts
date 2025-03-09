@@ -2,6 +2,7 @@ const translation = {
   api: {
     success: 'Success',
     actionSuccess: 'Action succeeded',
+    actionFailed: 'Action failed',
     saved: 'Saved',
     create: 'Created',
     remove: 'Removed',
@@ -81,6 +82,9 @@ const translation = {
   },
   workspace: {
     add: 'Add Workspace',
+    addTip: 'Create a new workspace. You will be the administrator of this workspace.',
+    name: 'Workspace Name',
+    namePlaceholder: 'Enter workspace name',
   },
   actionMsg: {
     noModification: 'No modifications at the moment.',

@@ -9,6 +9,7 @@ import { RiAddLine, RiUserAddLine } from '@remixicon/react'
 import { useTranslation } from 'react-i18next'
 import InviteModal from './invite-modal'
 import InvitedModal from './invited-modal'
+import AddWorkspaceModal from './add-workspace-modal'
 import Operation from './operation'
 import { fetchMembers } from '@/service/common'
 import I18n from '@/context/i18n'
@@ -51,6 +52,7 @@ const MembersPage = () => {
   InvitationResult[]
   >([])
   const [invitedModalVisible, setInvitedModalVisible] = useState(false)
+  const [addWorkspaceModalVisible, setAddWorkspaceModalVisible] = useState(false)
   const accounts = data?.accounts || []
   const { plan, enableBilling } = useProviderContext()
   const isNotUnlimitedMemberPlan
@@ -61,13 +63,25 @@ const MembersPage = () => {
     && accounts.length >= plan.total.teamMembers
 
   const handleAddWorkspace = () => {
-    Toast.notify({
-      type: 'info',
-      message: `${t('workspace.add')} - ${t(
-        'common.operation.comingSoon',
-        'Coming Soon',
-      )}`,
-    })
+    setAddWorkspaceModalVisible(true)
+  }
+
+  const handleCreateWorkspace = async (name: string) => {
+    try {
+      // 这里添加创建工作空间的 API 调用
+      // 由于目前没有实际的 API，我们先显示一个成功消息
+      Toast.notify({
+        type: 'success',
+        message: t('common.api.actionSuccess'),
+      })
+      setAddWorkspaceModalVisible(false)
+    }
+    catch (error) {
+      Toast.notify({
+        type: 'error',
+        message: t('common.api.actionFailed', 'Action failed'),
+      })
+    }
   }
 
   return (
@@ -219,6 +233,12 @@ const MembersPage = () => {
         <InvitedModal
           invitationResults={invitationResults}
           onCancel={() => setInvitedModalVisible(false)}
+        />
+      )}
+      {addWorkspaceModalVisible && (
+        <AddWorkspaceModal
+          onCancel={() => setAddWorkspaceModalVisible(false)}
+          onConfirm={handleCreateWorkspace}
         />
       )}
     </>

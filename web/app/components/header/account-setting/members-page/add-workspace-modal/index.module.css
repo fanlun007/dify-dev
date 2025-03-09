@@ -1,0 +1,13 @@
+.modal {
+  padding: 24px 32px !important;
+  width: 400px !important;
+}
+
+.wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 50;
+} 

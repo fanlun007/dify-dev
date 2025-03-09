@@ -2,6 +2,7 @@ const translation = {
   api: {
     success: '成功',
     actionSuccess: '操作成功',
+    actionFailed: '操作失败',
     saved: '已保存',
     create: '已创建',
     remove: '已移除',
@@ -81,6 +82,9 @@ const translation = {
   },
   workspace: {
     add: '添加工作空间',
+    addTip: '创建一个新的工作空间，您将成为该工作空间的管理员。',
+    name: '工作空间名称',
+    namePlaceholder: '请输入工作空间名称',
   },
   actionMsg: {
     noModification: '暂无修改',
