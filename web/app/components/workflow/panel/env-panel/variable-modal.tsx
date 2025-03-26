@@ -26,7 +26,7 @@ const VariableModal = ({
   const { notify } = useContext(ToastContext)
   const envList = useStore(s => s.environmentVariables)
   const envSecrets = useStore(s => s.envSecrets)
-  const [type, setType] = React.useState<'string' | 'number' | 'secret'>('string')
+  const [type, setType] = React.useState<'string' | 'number' | 'secret' | 'os'>('string')
   const [name, setName] = React.useState('')
   const [value, setValue] = React.useState<any>()
 
@@ -45,7 +45,7 @@ const VariableModal = ({
   const handleSave = () => {
     if (!checkVariableName(name))
       return
-    if (!value)
+    if (type !== 'os' && !value)
       return notify({ type: 'error', message: 'value can not be empty' })
     if (!env && envList.some(env => env.name === name))
       return notify({ type: 'error', message: 'name is existed' })
@@ -53,7 +53,7 @@ const VariableModal = ({
       id: env ? env.id : uuid4(),
       value_type: type,
       name,
-      value: type === 'number' ? Number(value) : value,
+      value: type === 'number' ? Number(value) : type === 'os' ? '' : value,
     })
     onClose()
   }
@@ -85,7 +85,7 @@ const VariableModal = ({
         {/* type */}
         <div className='mb-4'>
           <div className='mb-1 h-6 flex items-center text-text-secondary system-sm-semibold'>{t('workflow.env.modal.type')}</div>
-          <div className='flex gap-2'>
+          <div className='flex gap-2 flex-wrap'>
             <div className={cn(
               'w-[106px] flex items-center justify-center p-2 radius-md bg-components-option-card-option-bg border border-components-option-card-option-border text-text-secondary system-sm-regular cursor-pointer hover:shadow-xs hover:bg-components-option-card-option-bg-hover hover:border-components-option-card-option-border-hover',
               type === 'string' && 'text-text-primary system-sm-medium border-[1.5px] shadow-xs bg-components-option-card-option-selected-bg border-components-option-card-option-selected-border hover:border-components-option-card-option-selected-border',
@@ -107,6 +107,20 @@ const VariableModal = ({
                 popupContent={
                   <div className='w-[240px]'>
                     {t('workflow.env.modal.secretTip')}
+                  </div>
+                }
+                triggerClassName='ml-0.5 w-3.5 h-3.5'
+              />
+            </div>
+            <div className={cn(
+              'w-[106px] flex items-center justify-center p-2 radius-md bg-components-option-card-option-bg border border-components-option-card-option-border text-text-secondary system-sm-regular cursor-pointer hover:shadow-xs hover:bg-components-option-card-option-bg-hover hover:border-components-option-card-option-border-hover',
+              type === 'os' && 'text-text-primary font-medium border-[1.5px] shadow-xs bg-components-option-card-option-selected-bg border-components-option-card-option-selected-border hover:border-components-option-card-option-selected-border',
+            )} onClick={() => setType('os')}>
+              <span>OS</span>
+              <Tooltip
+                popupContent={
+                  <div className='w-[240px]'>
+                    {t('workflow.env.modal.osTip')}
                   </div>
                 }
                 triggerClassName='ml-0.5 w-3.5 h-3.5'
@@ -136,6 +150,7 @@ const VariableModal = ({
               value={value}
               onChange={e => setValue(e.target.value)}
               type={type !== 'number' ? 'text' : 'number'}
+              disabled={type === 'os'}
             />
           </div>
         </div>

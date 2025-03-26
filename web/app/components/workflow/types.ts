@@ -133,7 +133,7 @@ export type EnvironmentVariable = {
   id: string
   name: string
   value: any
-  value_type: 'string' | 'number' | 'secret'
+  value_type: 'string' | 'number' | 'secret' | 'os'
 }
 
 export type ConversationVariable = {
@@ -235,6 +235,7 @@ export enum VarType {
   string = 'string',
   number = 'number',
   secret = 'secret',
+  os = 'os',
   boolean = 'boolean',
   object = 'object',
   file = 'file',

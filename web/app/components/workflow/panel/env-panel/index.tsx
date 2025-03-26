@@ -99,7 +99,11 @@ const EnvPanel = () => {
           [env.id]: formatSecret(env.value),
         })
       }
-      const newList = [env, ...envList]
+      // Ensure OS variables always have empty value
+      if (env.value_type === 'os')
+        newEnv = { ...env, value: '' }
+
+      const newList = [newEnv, ...envList]
       updateEnvList(newList)
       await doSyncWorkflowDraft()
       updateEnvList(newList.map(e => (e.id === env.id && env.value_type === 'secret') ? { ...e, value: '[__HIDDEN__]' } : e))
@@ -127,6 +131,9 @@ const EnvPanel = () => {
           [env.id]: formatSecret(env.value),
         })
       }
+      // Ensure OS variables always have empty value when changing type to OS
+      if (env.value_type === 'os')
+        newEnv = { ...env, value: '' }
     }
     const newList = envList.map(e => e.id === currentVar.id ? newEnv : e)
     updateEnvList(newList)

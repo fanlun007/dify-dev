@@ -6,6 +6,7 @@ class SegmentType(StrEnum):
     STRING = "string"
     OBJECT = "object"
     SECRET = "secret"
+    OS = "os"
 
     FILE = "file"
 

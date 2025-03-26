@@ -120,6 +120,7 @@ const translation = {
       value: 'Value',
       valuePlaceholder: 'env value',
       secretTip: 'Used to define sensitive information or data, with DSL settings configured for leak prevention.',
+      osTip: 'Used to reference environment variables from the operating system. Only the name is required, the value will be taken from the OS environment.',
     },
     export: {
       title: 'Export Secret environment variables?',
@@ -387,7 +388,7 @@ const translation = {
       roleDescription: {
         system: 'Give high level instructions for the conversation',
         user: 'Provide instructions, queries, or any text-based input to the model',
-        assistant: 'The model’s responses  based on the user messages',
+        assistant: 'The model\'s responses  based on the user messages',
       },
       addMessage: 'Add Message',
       vision: 'vision',
@@ -421,8 +422,8 @@ const translation = {
     http: {
       inputVars: 'Input Variables',
       api: 'API',
-      apiPlaceholder: 'Enter URL, type ‘/’ insert variable',
-      extractListPlaceholder: 'Enter list item index, type ‘/’ insert variable',
+      apiPlaceholder: 'Enter URL, type \'/\' insert variable',
+      extractListPlaceholder: 'Enter list item index, type \'/\' insert variable',
       notStartWithHttp: 'API should start with http:// or https://',
       key: 'Key',
       type: 'Type',

@@ -32,6 +32,7 @@ from core.variables.variables import (
     IntegerVariable,
     NoneVariable,
     ObjectVariable,
+    OSVariable,
     SecretVariable,
     StringVariable,
     Variable,
@@ -91,6 +92,8 @@ def _build_variable_from_mapping(*, mapping: Mapping[str, Any], selector: Sequen
             result = StringVariable.model_validate(mapping)
         case SegmentType.SECRET:
             result = SecretVariable.model_validate(mapping)
+        case SegmentType.OS:
+            result = OSVariable.model_validate(mapping)
         case SegmentType.NUMBER if isinstance(value, int):
             result = IntegerVariable.model_validate(mapping)
         case SegmentType.NUMBER if isinstance(value, float):

@@ -1,6 +1,7 @@
 from collections.abc import Sequence
 from typing import cast
 from uuid import uuid4
+import os
 
 from pydantic import Field
 
@@ -93,3 +94,13 @@ class FileVariable(FileSegment, Variable):
 
 class ArrayFileVariable(ArrayFileSegment, ArrayVariable):
     pass
+
+
+class OSVariable(StringVariable):
+    value_type: SegmentType = SegmentType.OS
+    
+    def __init__(self, **data):
+        super().__init__(**data)
+        # Get value from OS environment if value is empty
+        if not self.value and self.name:
+            self.value = os.environ.get(self.name, "")
