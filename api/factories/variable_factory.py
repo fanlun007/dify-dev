@@ -1,3 +1,5 @@
+import os
+import traceback
 from collections.abc import Mapping, Sequence
 from typing import Any, cast
 from uuid import uuid4
@@ -71,9 +73,13 @@ def build_conversation_variable_from_mapping(mapping: Mapping[str, Any], /) -> V
 
 
 def build_environment_variable_from_mapping(mapping: Mapping[str, Any], /) -> Variable:
-    if not mapping.get("name"):
-        raise VariableError("missing name")
-    return _build_variable_from_mapping(mapping=mapping, selector=[ENVIRONMENT_VARIABLE_NODE_ID, mapping["name"]])
+    try:
+        if not mapping.get("name"):
+            raise VariableError("missing name")
+        return _build_variable_from_mapping(mapping=mapping, selector=[ENVIRONMENT_VARIABLE_NODE_ID, mapping["name"]])
+    except Exception as e:
+        traceback.print_exc()
+        raise VariableError(f"failed to build environment variable from mapping {mapping}: {e}") from e
 
 
 def _build_variable_from_mapping(*, mapping: Mapping[str, Any], selector: Sequence[str]) -> Variable:
@@ -93,6 +99,7 @@ def _build_variable_from_mapping(*, mapping: Mapping[str, Any], selector: Sequen
         case SegmentType.SECRET:
             result = SecretVariable.model_validate(mapping)
         case SegmentType.OS:
+            mapping["value"] = os.environ.get(mapping["name"], "__env_variable_from_os__")
             result = OSVariable.model_validate(mapping)
         case SegmentType.NUMBER if isinstance(value, int):
             result = IntegerVariable.model_validate(mapping)
