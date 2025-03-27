@@ -87,11 +87,11 @@ const VariableModal = ({
           <div className='mb-1 h-6 flex items-center text-text-secondary system-sm-semibold'>{t('workflow.env.modal.type')}</div>
           <div className='flex gap-2 flex-wrap'>
             <div className={cn(
-              'w-[106px] flex items-center justify-center p-2 radius-md bg-components-option-card-option-bg border border-components-option-card-option-border text-text-secondary system-sm-regular cursor-pointer hover:shadow-xs hover:bg-components-option-card-option-bg-hover hover:border-components-option-card-option-border-hover',
+              'w-[calc(50%-4px)] flex items-center justify-center p-2 radius-md bg-components-option-card-option-bg border border-components-option-card-option-border text-text-secondary system-sm-regular cursor-pointer hover:shadow-xs hover:bg-components-option-card-option-bg-hover hover:border-components-option-card-option-border-hover',
               type === 'string' && 'text-text-primary system-sm-medium border-[1.5px] shadow-xs bg-components-option-card-option-selected-bg border-components-option-card-option-selected-border hover:border-components-option-card-option-selected-border',
             )} onClick={() => setType('string')}>String</div>
             <div className={cn(
-              'w-[106px] flex items-center justify-center p-2 radius-md bg-components-option-card-option-bg border border-components-option-card-option-border text-text-secondary system-sm-regular cursor-pointer hover:shadow-xs hover:bg-components-option-card-option-bg-hover hover:border-components-option-card-option-border-hover',
+              'w-[calc(50%-4px)] flex items-center justify-center p-2 radius-md bg-components-option-card-option-bg border border-components-option-card-option-border text-text-secondary system-sm-regular cursor-pointer hover:shadow-xs hover:bg-components-option-card-option-bg-hover hover:border-components-option-card-option-border-hover',
               type === 'number' && 'text-text-primary font-medium border-[1.5px] shadow-xs bg-components-option-card-option-selected-bg border-components-option-card-option-selected-border hover:border-components-option-card-option-selected-border',
             )} onClick={() => {
               setType('number')
@@ -99,7 +99,7 @@ const VariableModal = ({
                 setValue('')
             }}>Number</div>
             <div className={cn(
-              'w-[106px] flex items-center justify-center p-2 radius-md bg-components-option-card-option-bg border border-components-option-card-option-border text-text-secondary system-sm-regular cursor-pointer hover:shadow-xs hover:bg-components-option-card-option-bg-hover hover:border-components-option-card-option-border-hover',
+              'w-[calc(50%-4px)] flex items-center justify-center p-2 radius-md bg-components-option-card-option-bg border border-components-option-card-option-border text-text-secondary system-sm-regular cursor-pointer hover:shadow-xs hover:bg-components-option-card-option-bg-hover hover:border-components-option-card-option-border-hover',
               type === 'secret' && 'text-text-primary font-medium border-[1.5px] shadow-xs bg-components-option-card-option-selected-bg border-components-option-card-option-selected-border hover:border-components-option-card-option-selected-border',
             )} onClick={() => setType('secret')}>
               <span>Secret</span>
@@ -113,7 +113,7 @@ const VariableModal = ({
               />
             </div>
             <div className={cn(
-              'w-[106px] flex items-center justify-center p-2 radius-md bg-components-option-card-option-bg border border-components-option-card-option-border text-text-secondary system-sm-regular cursor-pointer hover:shadow-xs hover:bg-components-option-card-option-bg-hover hover:border-components-option-card-option-border-hover',
+              'w-[calc(50%-4px)] flex items-center justify-center p-2 radius-md bg-components-option-card-option-bg border border-components-option-card-option-border text-text-secondary system-sm-regular cursor-pointer hover:shadow-xs hover:bg-components-option-card-option-bg-hover hover:border-components-option-card-option-border-hover',
               type === 'os' && 'text-text-primary font-medium border-[1.5px] shadow-xs bg-components-option-card-option-selected-bg border-components-option-card-option-selected-border hover:border-components-option-card-option-selected-border',
             )} onClick={() => setType('os')}>
               <span>OS</span>
