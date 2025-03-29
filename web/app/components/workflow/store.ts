@@ -2,6 +2,7 @@ import { useContext } from 'react'
 import {
   useStore as useZustandStore,
 } from 'zustand'
+import { devtools } from 'zustand/middleware'
 import { createStore } from 'zustand/vanilla'
 import { debounce } from 'lodash-es'
 import type { Viewport } from 'reactflow'
@@ -182,7 +183,7 @@ export const createWorkflowStore = () => {
     showChatVariablePanel: false,
     showGlobalVariablePanel: false,
   }
-  return createStore<Shape>(set => ({
+  return createStore<Shape>()(devtools(set => ({
     appId: '',
     panelWidth: localStorage.getItem('workflow-node-panel-width') ? parseFloat(localStorage.getItem('workflow-node-panel-width')!) : 420,
     showSingleRunPanel: false,
@@ -223,7 +224,7 @@ export const createWorkflowStore = () => {
     setIsRestoring: isRestoring => set(() => ({ isRestoring })),
     debouncedSyncWorkflowDraft: debounce((syncWorkflowDraft) => {
       syncWorkflowDraft()
-    }, 5000),
+    }, 500000),
     buildInTools: [],
     setBuildInTools: buildInTools => set(() => ({ buildInTools })),
     customTools: [],
@@ -295,7 +296,12 @@ export const createWorkflowStore = () => {
 
     versionHistory: [],
     setVersionHistory: versionHistory => set(() => ({ versionHistory })),
-  }))
+  }),
+  {
+    name: 'workflow-store',
+    enabled: true,
+  },
+  ))
 }
 
 export function useStore<T>(selector: (state: Shape) => T): T {
