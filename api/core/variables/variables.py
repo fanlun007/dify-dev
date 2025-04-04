@@ -19,6 +19,7 @@ from .segments import (
     IntegerSegment,
     NoneSegment,
     ObjectSegment,
+    OsSegment,
     Segment,
     StringSegment,
 )
@@ -96,5 +97,5 @@ class ArrayFileVariable(ArrayFileSegment, ArrayVariable):
     pass
 
 
-class OSVariable(StringVariable):
-    value_type: SegmentType = SegmentType.OS
+class OSVariable(OsSegment, Variable):
+    pass

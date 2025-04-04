@@ -50,6 +50,33 @@ class UnsupportedSegmentTypeError(Exception):
     pass
 
 
+# Define allowed OS environment variable keys
+ALLOWED_OS_ENV_KEYS = [
+    "PUE",
+    "posturl"
+]
+
+def validate_and_get_os_env(selector: Sequence[str]) -> str | None:
+    """
+    Validate if the selector's last element is in allowed OS environment variables
+    and return its value if it exists.
+    
+    Args:
+        selector: The selector sequence where the last element is the env var name
+        
+    Returns:
+        The environment variable value or None if not valid/found
+    """
+    if len(selector) < 2:
+        return None
+        
+    env_key = selector[-1]
+    if env_key not in ALLOWED_OS_ENV_KEYS:
+        return None
+        
+    return os.environ.get(env_key, "testinenv")
+
+
 # Define the constant
 SEGMENT_TO_VARIABLE_MAP = {
     StringSegment: StringVariable,
@@ -99,7 +126,7 @@ def _build_variable_from_mapping(*, mapping: Mapping[str, Any], selector: Sequen
         case SegmentType.SECRET:
             result = SecretVariable.model_validate(mapping)
         case SegmentType.OS:
-            mapping["value"] = os.environ.get(mapping["name"], "__env_variable_from_os__")
+            mapping["value"] = "__env_variable_from_os__"
             result = OSVariable.model_validate(mapping)
         case SegmentType.NUMBER if isinstance(value, int):
             result = IntegerVariable.model_validate(mapping)
@@ -167,9 +194,33 @@ def segment_to_variable(
     description: str = "",
 ) -> Variable:
     if isinstance(segment, Variable):
-        return segment
+        # Handle OSVariable specially
+        if isinstance(segment, OSVariable):
+            if env_value := validate_and_get_os_env(selector):
+                return OSVariable(
+                    id=segment.id,
+                    name=segment.name,
+                    description=segment.description,
+                    value=env_value,
+                    selector=selector,
+                    value_type=SegmentType.OS
+                )
+        return segment # default
+
     name = name or selector[-1]
     id = id or str(uuid4())
+
+    # Handle StringSegment to OSVariable conversion if needed
+    # if isinstance(segment, StringSegment) and selector[-1] in ALLOWED_OS_ENV_KEYS:
+    #     if env_value := validate_and_get_os_env(selector):
+    #         return OSVariable(
+    #             id=id,
+    #             name=name,
+    #             description=description,
+    #             value=env_value,
+    #             selector=selector,
+    #             value_type=SegmentType.OS
+    #         )
 
     segment_type = type(segment)
     if segment_type not in SEGMENT_TO_VARIABLE_MAP:

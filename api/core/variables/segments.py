@@ -71,6 +71,10 @@ class StringSegment(Segment):
     value_type: SegmentType = SegmentType.STRING
     value: str
 
+class OsSegment(Segment):
+    value_type: SegmentType = SegmentType.OS
+    value: str
+
 
 class FloatSegment(Segment):
     value_type: SegmentType = SegmentType.NUMBER
